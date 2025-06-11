@@ -1,15 +1,10 @@
-import { Text, View } from "react-native";
+import RemoteBackgroundScreen from "./tabs/app";
+
 
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Hello people</Text>
-    </View>
+
+      <RemoteBackgroundScreen/>
+
   );
 }
