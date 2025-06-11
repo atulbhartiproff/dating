@@ -5,15 +5,29 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  SafeAreaView,
   StatusBar,
   ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
-const { width, height } = Dimensions.get("window");
+import { useFonts } from 'expo-font';
 
 const OnboardingScreen = () => {
+    const [fontsLoaded] = useFonts({
+        'Fredoka-Light': require('../../assets/fonts/Fredoka-Light.ttf'),
+        'Fredoka-Regular': require('../../assets/fonts/Fredoka-Regular.ttf'),
+        'Fredoka-Medium': require('../../assets/fonts/Fredoka-Medium.ttf'),
+        'Fredoka-SemiBold': require('../../assets/fonts/Fredoka-SemiBold.ttf'),
+        'Fredoka-Bold': require('../../assets/fonts/Fredoka-Bold.ttf'),
+      });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading fonts...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -80,6 +94,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+  },
   background: {
     flex: 1,
     width: "100%",
@@ -99,36 +119,19 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     alignItems: "center",
   },
-  heartContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "rgba(255, 255, 255, 0.15)",
-    borderWidth: 2,
-    borderColor: "rgba(255, 182, 193, 0.8)",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  heartIcon: {
-    fontSize: 40,
-    color: "#FFB6C1",
-  },
   textContainer: {
     alignItems: "center",
     marginBottom: 50,
   },
   title: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght", // Your custom Fredoka font
-    fontWeight: "700",
+    fontFamily: "Fredoka-Bold", 
     fontSize: 28,
     color: "#FFFFFF",
     textAlign: "center",
     marginBottom: 16,
   },
   subtitle: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght", // Your custom Fredoka font
-    fontWeight: "400",
+    fontFamily: "Fredoka-Regular",
     fontSize: 16,
     color: "rgba(255,255,255,0.9)",
     textAlign: "center",
@@ -153,8 +156,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   nextButtonText: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght", // Your custom Fredoka font
-    fontWeight: "600",
+    fontFamily: "Fredoka-SemiBold", // Use the key from useFonts
     fontSize: 18,
     color: "#FFFFFF",
   },
@@ -163,34 +165,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   loginPrompt: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght", // Your custom Fredoka font
-    fontWeight: "400",
+    fontFamily: "Fredoka-Regular", // Use the key from useFonts
     fontSize: 16,
     color: "rgba(255,255,255,0.8)",
     marginBottom: 8,
   },
   loginLink: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght", // Your custom Fredoka font
-    fontWeight: "600",
+    fontFamily: "Fredoka-SemiBold", // Use the key from useFonts
     fontSize: 16,
     color: "#FFFFFF",
     textDecorationLine: "underline",
-  },
-  // Your original Fredoka styles maintained
-  fredokaLight: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght",
-    fontWeight: "300",
-    fontSize: 24,
-  },
-  fredokaRegular: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght",
-    fontWeight: "400",
-    fontSize: 24,
-  },
-  fredokaBold: {
-    fontFamily: "Fredoka-VariableFont_wdth,wght",
-    fontWeight: "700",
-    fontSize: 24,
   },
 });
 
