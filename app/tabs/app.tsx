@@ -57,8 +57,7 @@ const OnboardingScreen = () => {
 
         {/* Content */}
         <View style={styles.contentContainer}>
-          {/* Heart Logo */}
-          <View style={styles.logoContainer}></View>
+ 
 
           {/* Main Content */}
           <View style={styles.textContainer}>
