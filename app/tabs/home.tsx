@@ -13,8 +13,7 @@ import { useRouter } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SwipeableCardStack from '../components/swipeableCardStack';
 import useProfileStore from '../store/profileStore';
-import { Constants } from 'expo-constants';
-
+import GestureErrorBoundary from '../components/gestureErrorBoundary';
 
 const HomeScreen = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -105,7 +104,7 @@ const HomeScreen = () => {
           ]}
         >
           {hasMoreProfiles() ? (
-            <>
+            <GestureErrorBoundary>
               <SwipeableCardStack
                 profiles={profiles}
                 currentIndex={currentIndex}
@@ -116,7 +115,7 @@ const HomeScreen = () => {
                   <Text style={styles.loadingText}>Loading more profiles...</Text>
                 </View>
               )} */}
-            </>
+            </GestureErrorBoundary>
           ) : (
             <View style={styles.emptyState}>
               <Ionicons name="heart-outline" size={80} color="#FF69B4" />
