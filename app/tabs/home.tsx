@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SwipeableCardStack from '../components/swipeableCardStack';
 import useProfileStore from '../store/profileStore';
 import GestureErrorBoundary from '../components/gestureErrorBoundary';
+import mockProfiles from '../Data/mockprofiles.json';
 
 const HomeScreen = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -56,7 +57,12 @@ const HomeScreen = () => {
   };
 
   const handleSwipe = (direction: string) => {
-    console.log(`Swiped ${direction} on profile:`, getCurrentProfile()?.name);
+    const currentProfile = getCurrentProfile();
+    if (!currentProfile) {
+      console.warn('No profile available to swipe.');
+      return;
+    }
+    console.log(`Swiped ${direction} on profile:`, currentProfile.name);
     swipeProfile(direction);
   };
 
@@ -72,9 +78,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
     <GestureHandlerRootView>
-      
-        {/* <StatusBar barStyle="light-content" backgroundColor="#000" /> */}
-        
+              
         {/* Header*/}
         <Animated.View
           style={[
@@ -103,18 +107,28 @@ const HomeScreen = () => {
             },
           ]}
         >
-          {hasMoreProfiles() ? (
+          {profiles.length === 0 && !isLoading ? (
+            <View style={styles.errorState}>
+              <Text style={styles.errorText}>Failed to load profiles. Please try again.</Text>
+              <TouchableOpacity 
+                style={styles.refreshButton}
+                onPress={handleRefresh}
+              >
+                <Text style={styles.refreshText}>Retry</Text>
+              </TouchableOpacity>
+            </View>
+          ) : hasMoreProfiles() ? (
             <GestureErrorBoundary>
               <SwipeableCardStack
                 profiles={profiles}
                 currentIndex={currentIndex}
                 onSwipe={handleSwipe}
               />
-              {/* {isLoading && (
+              {isLoading && (
                 <View style={styles.loadingIndicator}>
-                  <Text style={styles.loadingText}>Loading more profiles...</Text>
+                  <Text style={styles.loadingText}>Loading profiles...</Text>
                 </View>
-              )} */}
+              )}
             </GestureErrorBoundary>
           ) : (
             <View style={styles.emptyState}>
@@ -141,10 +155,10 @@ const HomeScreen = () => {
               Profile {currentIndex + 1} of {profiles.length}
             </Text>
             <Text style={styles.debugText}>
-              Current: {getCurrentProfile()?.name || 'None'}
+              Current: {getCurrentProfile()?.name || 'No profiles loaded'}
             </Text>
             <Text style={styles.debugText}>
-              Next: {getNextProfile()?.name || 'None'}
+              Next: {getNextProfile()?.name || 'No profiles available'}
             </Text>
           </View>
         )} */}
@@ -255,6 +269,34 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Inter',
   },
+  errorState: {
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    justifyContent: 'center',
+    flex: 1,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#FF0000',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 20,
+    fontFamily: 'Inter',
+  },
 });
 
 export default HomeScreen;
+
+initializeProfiles:() => {
+  try {
+    if (!get().isInitialized) {
+      set({
+        profiles: [...mockProfiles], // Load profiles from JSON file
+        currentIndex: 0,
+        isInitialized: true,
+      });
+    }
+  } catch (error) {
+    console.error('Failed to initialize profiles:', error);
+  }
+};
